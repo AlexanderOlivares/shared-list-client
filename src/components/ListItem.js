@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import EditItem from "./EditItem";
 
 export default function ListItem() {
   const [items, setItems] = useState([]);
@@ -6,14 +7,29 @@ export default function ListItem() {
   async function getItems() {
     const res = await fetch(`http://localhost:5000/items`);
     let listItemArray = await res.json();
+    console.log(listItemArray);
     setItems(listItemArray);
   }
-
-  console.log(items);
 
   useEffect(() => {
     getItems();
   }, []);
+
+  useEffect(() => {
+    console.log("update");
+  }, [items]);
+
+  async function deleteListItem(id) {
+    try {
+      await fetch(`http://localhost:5000/items/${id}`, {
+        method: "DELETE",
+      });
+
+      setItems(items.filter(item => item.item_id !== id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
 
   return (
     <>
@@ -26,20 +42,20 @@ export default function ListItem() {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
-            <td>Jill</td>
-            <td>Smith</td>
-            <td>50</td>
-          </tr> */}
           {items.map(item => {
             return (
-              <tr>
+              <tr key={item.item_id}>
                 <td>{item.description}</td>
                 <td>
-                  <button className="btn-sm btn-warning">Edit</button>
+                  <EditItem item={item} />
                 </td>
                 <td>
-                  <button className="btn-sm btn-danger">Edit</button>
+                  <button
+                    className="btn-sm btn-danger"
+                    onClick={() => deleteListItem(item.item_id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );

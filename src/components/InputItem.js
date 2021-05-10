@@ -4,7 +4,6 @@ export default function InputItem() {
   const [description, setDescription] = useState("");
 
   const handleUserInput = e => setDescription(e.target.value);
-  console.log(description);
 
   const handleFormSubmit = async e => {
     e.preventDefault();
@@ -16,6 +15,8 @@ export default function InputItem() {
         body: JSON.stringify(body),
       });
       console.log(response);
+      setDescription("");
+      window.location = "/";
     } catch (err) {
       console.error(err.message);
     }
