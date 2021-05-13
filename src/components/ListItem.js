@@ -15,10 +15,6 @@ export default function ListItem() {
     getItems();
   }, []);
 
-  useEffect(() => {
-    console.log("update");
-  }, [items]);
-
   async function deleteListItem(id) {
     try {
       await fetch(`http://localhost:5000/items/${id}`, {

@@ -11,7 +11,6 @@ export default function EditItem({ item }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      console.log(body);
       window.location = "/";
     } catch (err) {
       console.error(err.message);
@@ -32,12 +31,12 @@ export default function EditItem({ item }) {
 
       <div
         className="modal fade"
-        // id="exampleModal"
         id={`id${item.item_id}`}
         tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        onClick={() => setDescription(item.description)}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -50,7 +49,6 @@ export default function EditItem({ item }) {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
-                // onClick={setDescription(item.description)}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -68,6 +66,7 @@ export default function EditItem({ item }) {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={() => setDescription(item.description)}
               >
                 Close
               </button>
