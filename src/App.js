@@ -60,8 +60,3 @@ function App() {
 }
 
 export default App;
-
-// <div className="container">
-//   <InputItem />
-//   <ListItem />
-// </div>
