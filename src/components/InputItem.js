@@ -15,17 +15,14 @@ export default function InputItem({ setItemWasChanged }) {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("token", localStorage.token);
 
-      const response = await fetch("http://localhost:5000/dashboard/items", {
+      await fetch("http://localhost:5000/dashboard/items", {
         method: "POST",
         headers: myHeaders,
         body: JSON.stringify(body),
       });
 
-      const parseResponse = await response.json();
-      console.log(parseResponse);
       setItemWasChanged(true);
       setDescription("");
-      // window.location = "/";
     } catch (err) {
       console.error(err.message);
     }

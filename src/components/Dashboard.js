@@ -27,8 +27,6 @@ export default function Dashboard({ setAuth }) {
     }
   }
 
-  console.log(name);
-
   useEffect(() => {
     getName();
     setItemWasChanged(false);

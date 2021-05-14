@@ -18,7 +18,6 @@ export default function EditItem({ item, setItemWasChanged }) {
       });
 
       setItemWasChanged(true);
-      // window.location = "/";
     } catch (err) {
       console.error(err.message);
     }
@@ -30,7 +29,6 @@ export default function EditItem({ item, setItemWasChanged }) {
         type="button"
         className="btn-sm btn-warning"
         data-toggle="modal"
-        // data-target="#exampleModal"
         data-target={`#id${item.item_id}`}
       >
         Edit

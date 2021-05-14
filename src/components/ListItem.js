@@ -39,6 +39,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
           </tr>
         </thead>
         <tbody>
+          {/* if new user has no items yet this prevents rendering just an edit and delete button */}
           {items.length !== 0 &&
             items[0].item_id !== null &&
             items.map(item => {
