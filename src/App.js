@@ -5,13 +5,12 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import InputItem from "./components/InputItem";
-import ListItem from "./components/ListItem";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import Landing from "./components/Landing";
 
 toast.configure();
 
@@ -43,6 +42,17 @@ function App() {
     <>
       <Router>
         <Switch>
+          <Route
+            exact
+            path="/"
+            render={props =>
+              !isAuthenticated ? (
+                <Landing {...props} />
+              ) : (
+                <Redirect to="/dashboard" />
+              )
+            }
+          ></Route>
           <Route
             exact
             path="/login"

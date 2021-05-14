@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 
-export default function EditItem({ item }) {
+export default function EditItem({ item, setItemWasChanged }) {
   const [description, setDescription] = useState(item.description);
 
   const editText = async id => {
     try {
       const body = { description };
-      const res = await fetch(`http://localhost:5000/items/${id}`, {
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("token", localStorage.token);
+
+      await fetch(`http://localhost:5000/dashboard/items/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: myHeaders,
         body: JSON.stringify(body),
       });
-      window.location = "/";
+
+      setItemWasChanged(true);
+      // window.location = "/";
     } catch (err) {
       console.error(err.message);
     }

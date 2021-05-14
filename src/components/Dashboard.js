@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import InputItem from "./InputItem";
+import ListItem from "./ListItem";
 
 export default function Dashboard({ setAuth }) {
   const [name, setName] = useState("");
+  const [allItems, setAllItems] = useState([]);
+  const [itemWasChanged, setItemWasChanged] = useState(false);
 
   async function getName() {
     try {
-      const response = await fetch(`http://localhost:5000/dashboard`, {
+      const response = await fetch(`http://localhost:5000/dashboard/`, {
         method: "GET",
         headers: {
           token: localStorage.token,
@@ -15,16 +19,20 @@ export default function Dashboard({ setAuth }) {
 
       const parseRes = await response.json();
 
-      console.log(parseRes);
-      setName(parseRes.user_name);
+      setAllItems(parseRes);
+
+      setName(parseRes[0].user_name);
     } catch (err) {
       console.error(err.message);
     }
   }
 
+  console.log(name);
+
   useEffect(() => {
     getName();
-  }, []);
+    setItemWasChanged(false);
+  }, [itemWasChanged]);
 
   const logout = e => {
     e.preventDefault();
@@ -35,10 +43,14 @@ export default function Dashboard({ setAuth }) {
 
   return (
     <>
-      <h1>Dashboard {name}</h1>
-      <button className="btn btn-danger" onClick={e => logout(e)}>
-        logout
-      </button>
+      <div className="d-flex mt-3 justify-content-around">
+        <h1>Welcome {name}</h1>
+        <button className="btn btn-danger" onClick={e => logout(e)}>
+          logout
+        </button>
+      </div>
+      <InputItem setItemWasChanged={setItemWasChanged} />
+      <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
     </>
   );
 }

@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import EditItem from "./EditItem";
 
-export default function ListItem() {
+export default function ListItem({ allItems, setItemWasChanged }) {
   const [items, setItems] = useState([]);
 
-  async function getItems() {
-    const res = await fetch(`http://localhost:5000/items`);
-    let listItemArray = await res.json();
-    console.log(listItemArray);
-    setItems(listItemArray);
-  }
+  // async function getItems() {
+  //   const res = await fetch(`http://localhost:5000/items`);
+  //   let listItemArray = await res.json();
+  //   console.log(listItemArray);
+  //   setItems(listItemArray);
+  // }
 
   useEffect(() => {
-    getItems();
-  }, []);
+    setItems(allItems);
+  }, [allItems]);
 
   async function deleteListItem(id) {
     try {
-      await fetch(`http://localhost:5000/items/${id}`, {
+      await fetch(`http://localhost:5000/dashboard/items/${id}`, {
         method: "DELETE",
+        headers: { token: localStorage.token },
       });
 
       setItems(items.filter(item => item.item_id !== id));
@@ -38,24 +39,29 @@ export default function ListItem() {
           </tr>
         </thead>
         <tbody>
-          {items.map(item => {
-            return (
-              <tr key={item.item_id}>
-                <td>{item.description}</td>
-                <td>
-                  <EditItem item={item} />
-                </td>
-                <td>
-                  <button
-                    className="btn-sm btn-danger"
-                    onClick={() => deleteListItem(item.item_id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+          {items.length !== 0 &&
+            items[0].item_id !== null &&
+            items.map(item => {
+              return (
+                <tr key={item.item_id}>
+                  <td>{item.description}</td>
+                  <td>
+                    <EditItem
+                      item={item}
+                      setItemWasChanged={setItemWasChanged}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className="btn-sm btn-danger"
+                      onClick={() => deleteListItem(item.item_id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </>
