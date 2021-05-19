@@ -46,6 +46,7 @@ export default function Dashboard({ setAuth }) {
         <button className="btn btn-danger" onClick={e => logout(e)}>
           logout
         </button>
+        <button className="btn btn-primary">Invite editor</button>
       </div>
       <InputItem setItemWasChanged={setItemWasChanged} />
       <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
