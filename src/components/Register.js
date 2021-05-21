@@ -7,6 +7,7 @@ export default function Register({ setAuth }) {
     email: "",
     password: "",
     name: "",
+    guests_email: "",
   });
 
   const { email, name, password } = inputs;

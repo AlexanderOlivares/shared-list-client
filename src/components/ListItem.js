@@ -11,6 +11,8 @@ export default function ListItem({ allItems, setItemWasChanged }) {
   //   setItems(listItemArray);
   // }
 
+  console.log(items);
+
   useEffect(() => {
     setItems(allItems);
   }, [allItems]);
