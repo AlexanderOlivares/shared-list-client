@@ -5,6 +5,7 @@ import ListItem from "./ListItem";
 
 export default function Dashboard({ setAuth }) {
   const [name, setName] = useState("");
+  const [creatorEmail, setCreatorEmail] = useState("");
   const [allItems, setAllItems] = useState([]);
   const [itemWasChanged, setItemWasChanged] = useState(false);
   const [guestName, setGuestName] = useState(null);
@@ -28,6 +29,8 @@ export default function Dashboard({ setAuth }) {
       setAllItems(parseRes);
 
       setName(`${parseRes[0].creator_name}`);
+      setCreatorEmail(`${parseRes[0].creator}`);
+
       // setGuestName(`${parseRes[0].editors_name}`);
       setGuestName(parseRes[0].editors_name);
     } catch (err) {
@@ -36,7 +39,7 @@ export default function Dashboard({ setAuth }) {
   }
 
   console.log(allItems);
-  console.log(guestName);
+  console.log(creatorEmail);
 
   useEffect(() => {
     getName();
@@ -57,9 +60,35 @@ export default function Dashboard({ setAuth }) {
     });
   };
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = async e => {
     e.preventDefault();
-    console.log("form was submitted");
+    try {
+      const { name: editors_name, email: editors } = modalInput;
+
+      const myHeaders = new Headers();
+
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("token", localStorage.token);
+
+      let creator = creatorEmail;
+
+      const body = {
+        creator,
+        editors_name,
+        editors,
+      };
+
+      console.log(JSON.stringify(body));
+      await fetch(`http://localhost:5000/dashboard/invite`, {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(body),
+      });
+
+      setGuestName(editors_name);
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   return (
@@ -134,7 +163,11 @@ export default function Dashboard({ setAuth }) {
                 >
                   Close
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  // data-dismiss="modal"
+                >
                   Send invite
                 </button>
               </div>
