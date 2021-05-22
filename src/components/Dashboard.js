@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import InputItem from "./InputItem";
 import ListItem from "./ListItem";
+import emailjs from "emailjs-com";
 
 export default function Dashboard({ setAuth }) {
+  const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
+  const EMAILJS_SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
+  const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
+
   const [name, setName] = useState("");
   const [creatorEmail, setCreatorEmail] = useState("");
   const [allItems, setAllItems] = useState([]);
@@ -13,6 +18,7 @@ export default function Dashboard({ setAuth }) {
     name: "",
     email: "",
   });
+  const [show, setShow] = useState(false);
 
   async function getName() {
     try {
@@ -78,6 +84,24 @@ export default function Dashboard({ setAuth }) {
         editors,
       };
 
+      emailjs
+        .sendForm(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          e.target,
+          EMAILJS_USER_ID
+        )
+        .then(
+          result => {
+            console.log(result.text);
+            alert("invitation was sent");
+          },
+          error => {
+            console.log(error.text);
+            alert("error could not send invite");
+          }
+        );
+
       console.log(JSON.stringify(body));
       await fetch(`http://localhost:5000/dashboard/invite`, {
         method: "PUT",
@@ -99,7 +123,7 @@ export default function Dashboard({ setAuth }) {
         <button className="btn btn-danger" onClick={e => logout(e)}>
           logout
         </button>
-        {/* IF EDITORS NAME !== NULL THEN SHOW BUTTON */}
+        {/* IF EDITORS NAME !== NULL THEN SHOW INVITE BUTTON */}
         {!guestName && (
           <button
             type="button"
@@ -116,7 +140,7 @@ export default function Dashboard({ setAuth }) {
       <div
         className="modal fade"
         id="exampleModal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -136,6 +160,7 @@ export default function Dashboard({ setAuth }) {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            {/* <form onSubmit={handleFormSubmit}> */}
             <form onSubmit={handleFormSubmit}>
               <div className="modal-body">
                 <input
@@ -154,6 +179,8 @@ export default function Dashboard({ setAuth }) {
                   placeholder="editors@email.com"
                   onChange={handleModalInput}
                 />
+                <input type="hidden" name="creator" value={name} />
+                <input type="hidden" name="creatorEmail" value={creatorEmail} />
               </div>
               <div className="modal-footer">
                 <button
