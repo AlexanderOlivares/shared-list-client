@@ -115,6 +115,10 @@ export default function Dashboard({ setAuth }) {
     }
   };
 
+  const joinNameWithDash = nameStr => {
+    return nameStr.replace(/\s/g, "-");
+  };
+
   return (
     <>
       <div className="d-flex mt-3 justify-content-around">
@@ -179,7 +183,12 @@ export default function Dashboard({ setAuth }) {
                   placeholder="editors@email.com"
                   onChange={handleModalInput}
                 />
-                <input type="hidden" name="creator" value={name} />
+                {/* joining name by dash as a test */}
+                <input
+                  type="hidden"
+                  name="creator"
+                  value={joinNameWithDash(name)}
+                />
                 <input type="hidden" name="creatorEmail" value={creatorEmail} />
               </div>
               <div className="modal-footer">

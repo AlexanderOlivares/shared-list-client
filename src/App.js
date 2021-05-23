@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams,
 } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -87,6 +88,11 @@ function App() {
                 <Redirect to="/login" />
               )
             }
+          ></Route>
+          <Route
+            exact
+            path="/guest-register/:guestsemail/:guestsname"
+            render={props => <Register {...props} setAuth={setAuth} />}
           ></Route>
         </Switch>
       </Router>
