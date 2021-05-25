@@ -4,15 +4,6 @@ import EditItem from "./EditItem";
 export default function ListItem({ allItems, setItemWasChanged }) {
   const [items, setItems] = useState([]);
 
-  // async function getItems() {
-  //   const res = await fetch(`http://localhost:5000/items`);
-  //   let listItemArray = await res.json();
-  //   console.log(listItemArray);
-  //   setItems(listItemArray);
-  // }
-
-  console.log(items);
-
   useEffect(() => {
     setItems(allItems);
   }, [allItems]);
@@ -36,6 +27,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
         <thead>
           <tr>
             <th>Item</th>
+            <th>Creator</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -48,6 +40,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
               return (
                 <tr key={item.item_id}>
                   <td>{item.description}</td>
+                  <td>{item.creator_name.split(" ")[0]}</td>
                   <td>
                     <EditItem
                       item={item}

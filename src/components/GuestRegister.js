@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function GuestRegister({ setAuth }) {
+export default function Register({ setAuth }) {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
     name: "",
     guests_email: "",
   });
+
+  const { guestsemail, guestsname } = useParams();
 
   const { email, name, password } = inputs;
 
@@ -19,14 +21,17 @@ export default function GuestRegister({ setAuth }) {
   const handleFormSubmit = async e => {
     e.preventDefault();
     try {
-      const body = { email, name, password };
-      const response = await fetch(`http://localhost:5000/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const body = { email, name, password, guestsemail, guestsname };
+      const response = await fetch(
+        `http://localhost:5000/auth/guest-register/${guestsemail}/${guestsname}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
       const parseRes = await response.json();
 
       if (parseRes.token) {
@@ -56,6 +61,7 @@ export default function GuestRegister({ setAuth }) {
             placeholder="email"
             value={email}
             onChange={handleInput}
+            required
           ></input>
           <input
             className="form-control my-3"
@@ -64,6 +70,7 @@ export default function GuestRegister({ setAuth }) {
             placeholder="password"
             value={password}
             onChange={handleInput}
+            required
           ></input>
           <input
             className="form-control my-3"
@@ -72,7 +79,10 @@ export default function GuestRegister({ setAuth }) {
             placeholder="your name"
             value={name}
             onChange={handleInput}
+            required
           ></input>
+          <input type="hidden" name="guest_name" value={guestsname}></input>
+          <input type="hidden" name="guest_email" value={guestsemail}></input>
           <button className="btn btn-block btn-success">sign up</button>
         </form>
         <Link to="/login">Already have an account? Login</Link>

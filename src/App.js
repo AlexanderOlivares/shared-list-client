@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
+import GuestRegister from "./components/GuestRegister";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
 
@@ -92,7 +93,14 @@ function App() {
           <Route
             exact
             path="/guest-register/:guestsemail/:guestsname"
-            render={props => <Register {...props} setAuth={setAuth} />}
+            // render={props => <GuestRegister {...props} setAuth={setAuth} />}
+            render={props =>
+              isAuthenticated ? (
+                <Dashboard {...props} setAuth={setAuth} />
+              ) : (
+                <GuestRegister {...props} setAuth={setAuth} />
+              )
+            }
           ></Route>
         </Switch>
       </Router>

@@ -18,9 +18,9 @@ export default function Dashboard({ setAuth }) {
     name: "",
     email: "",
   });
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
 
-  async function getName() {
+  async function getListItems() {
     try {
       const response = await fetch(`http://localhost:5000/dashboard/`, {
         method: "GET",
@@ -30,15 +30,41 @@ export default function Dashboard({ setAuth }) {
       });
 
       const parseRes = await response.json();
-      console.log(parseRes);
 
       setAllItems(parseRes);
 
-      setName(`${parseRes[0].creator_name}`);
-      setCreatorEmail(`${parseRes[0].creator}`);
+      // NEED TO SET GUEST NAME SOMEHOW FROM THE GET / REQUEST OR /NAME-EMAIL REQ
+    } catch (err) {
+      console.error(err.message);
+      // alert(`An error occured. Please refresh the browser.`);
+    }
+  }
 
-      // setGuestName(`${parseRes[0].editors_name}`);
-      setGuestName(parseRes[0].editors_name);
+  async function getUsernameAndEmail() {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/dashboard/name-email`,
+        {
+          method: "GET",
+          headers: {
+            token: localStorage.token,
+          },
+        }
+      );
+
+      const parseRes = await response.json();
+
+      setName(parseRes[0].user_name);
+      setCreatorEmail(parseRes[0].user_email);
+
+      console.log(parseRes);
+
+      setGuestName(parseRes[0].guests_name);
+
+      // let guest = parseRes[0].guests_name;
+      // if (guest) {
+      //   setGuestName(parseRes[0].editors_name);
+      // }
     } catch (err) {
       console.error(err.message);
     }
@@ -46,9 +72,12 @@ export default function Dashboard({ setAuth }) {
 
   console.log(allItems);
   console.log(creatorEmail);
+  console.log(name);
+  console.log(guestName);
 
   useEffect(() => {
-    getName();
+    getUsernameAndEmail();
+    getListItems();
     setItemWasChanged(false);
   }, [itemWasChanged]);
 
@@ -122,8 +151,8 @@ export default function Dashboard({ setAuth }) {
   return (
     <>
       <div className="d-flex mt-3 justify-content-around">
-        {name && <h1>{name}</h1>}
-        {/* {guestName !== null && <p>{guestName}</p>} */}
+        {name && <p>{`${name} is logged in`}</p>}
+        {guestName && <p>{`${guestName} can edit this list`}</p>}
         <button className="btn btn-danger" onClick={e => logout(e)}>
           logout
         </button>
@@ -164,7 +193,6 @@ export default function Dashboard({ setAuth }) {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {/* <form onSubmit={handleFormSubmit}> */}
             <form onSubmit={handleFormSubmit}>
               <div className="modal-body">
                 <input
@@ -174,6 +202,7 @@ export default function Dashboard({ setAuth }) {
                   value={modalInput.name}
                   placeholder="editor's name"
                   onChange={handleModalInput}
+                  required
                 />
                 <input
                   className="form-control"
@@ -182,8 +211,9 @@ export default function Dashboard({ setAuth }) {
                   type="email"
                   placeholder="editors@email.com"
                   onChange={handleModalInput}
+                  required
                 />
-                {/* joining name by dash as a test */}
+                {/* joining name by dash for use in url */}
                 <input
                   type="hidden"
                   name="creator"
