@@ -18,7 +18,6 @@ export default function Dashboard({ setAuth }) {
     name: "",
     email: "",
   });
-  // const [show, setShow] = useState(false);
 
   async function getListItems() {
     try {
@@ -32,8 +31,6 @@ export default function Dashboard({ setAuth }) {
       const parseRes = await response.json();
 
       setAllItems(parseRes);
-
-      // NEED TO SET GUEST NAME SOMEHOW FROM THE GET / REQUEST OR /NAME-EMAIL REQ
     } catch (err) {
       console.error(err.message);
       // alert(`An error occured. Please refresh the browser.`);
@@ -87,22 +84,23 @@ export default function Dashboard({ setAuth }) {
     });
   };
 
+  const joinNameWithDash = nameStr => {
+    return nameStr.trim().replace(/\s/g, "-");
+  };
+
   const handleFormSubmit = async e => {
     e.preventDefault();
     try {
       const { name: editors_name, email: editors } = modalInput;
 
-      const myHeaders = new Headers();
+      let creator = btoa(creatorEmail);
+      let creatorNameNoDash = name;
+      let creatorName = joinNameWithDash(name);
 
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("token", localStorage.token);
-
-      let creator = creatorEmail;
-
-      // FIGURE OUT WHY EMAIL ISNT SENDING;
+      // body obj is used for email params and put request
       const body = {
-        // creator name is new keep other params
-        creatorName: name,
+        creatorNameNoDash,
+        creatorName,
         creator,
         editors_name,
         editors,
@@ -122,6 +120,11 @@ export default function Dashboard({ setAuth }) {
         );
 
       console.log(JSON.stringify(body));
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("token", localStorage.token);
+
       await fetch(`http://localhost:5000/dashboard/invite`, {
         method: "PUT",
         headers: myHeaders,
@@ -132,10 +135,6 @@ export default function Dashboard({ setAuth }) {
     } catch (err) {
       console.error(err.message);
     }
-  };
-
-  const joinNameWithDash = nameStr => {
-    return nameStr.replace(/\s/g, "-");
   };
 
   return (
@@ -184,7 +183,8 @@ export default function Dashboard({ setAuth }) {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form onSubmit={handleFormSubmit}>
+            {/* <form onSubmit={handleFormSubmit}> */}
+            <form>
               <div className="modal-body">
                 <input
                   className="form-control"
@@ -205,11 +205,7 @@ export default function Dashboard({ setAuth }) {
                   required
                 />
                 {/* joining name by dash for use in url */}
-                <input
-                  type="hidden"
-                  name="creator"
-                  value={joinNameWithDash(name)}
-                />
+                <input type="hidden" name="creator" value={name} />
                 <input type="hidden" name="creatorEmail" value={creatorEmail} />
               </div>
               <div className="modal-footer">
@@ -222,8 +218,9 @@ export default function Dashboard({ setAuth }) {
                 </button>
                 <button
                   type="submit"
+                  onClick={handleFormSubmit}
                   className="btn btn-primary"
-                  // data-dismiss="modal"
+                  data-dismiss="modal"
                 >
                   Send invite
                 </button>

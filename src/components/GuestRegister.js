@@ -10,7 +10,9 @@ export default function Register({ setAuth }) {
     guests_email: "",
   });
 
-  const { guestsemail, guestsname } = useParams();
+  let { guestsemail, guestsname } = useParams();
+
+  guestsemail = atob(guestsemail);
 
   const { email, name, password } = inputs;
 
