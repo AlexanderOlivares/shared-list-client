@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function InputItem({ setItemWasChanged }) {
+export default function InputItem({ name, guestName, setItemWasChanged }) {
   const [description, setDescription] = useState("");
 
   const handleUserInput = e => setDescription(e.target.value);
@@ -30,7 +30,11 @@ export default function InputItem({ setItemWasChanged }) {
 
   return (
     <>
-      <h1 className="display-4 text-center my-5">Our List</h1>
+      <div className="text-center">
+        <h1 className="display-4 my-2">Our List</h1>
+        {name && <p>{`${name} is logged in`}</p>}
+        {guestName && <p>{`${guestName} can edit this list`}</p>}
+      </div>
       <form className="d-flex" onSubmit={handleFormSubmit}>
         <input
           type="text"

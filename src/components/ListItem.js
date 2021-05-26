@@ -27,9 +27,9 @@ export default function ListItem({ allItems, setItemWasChanged }) {
         <thead>
           <tr>
             <th>Item</th>
-            <th>Creator</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>Creator</th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +40,6 @@ export default function ListItem({ allItems, setItemWasChanged }) {
               return (
                 <tr key={item.item_id}>
                   <td>{item.description}</td>
-                  <td>{item.creator_name.split(" ")[0]}</td>
                   <td>
                     <EditItem
                       item={item}
@@ -55,6 +54,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
                       Delete
                     </button>
                   </td>
+                  <td>{item.creator_name.split(" ")[0]}</td>
                 </tr>
               );
             })}

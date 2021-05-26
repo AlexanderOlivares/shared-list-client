@@ -56,15 +56,7 @@ export default function Dashboard({ setAuth }) {
 
       setName(parseRes[0].user_name);
       setCreatorEmail(parseRes[0].user_email);
-
-      console.log(parseRes);
-
       setGuestName(parseRes[0].guests_name);
-
-      // let guest = parseRes[0].guests_name;
-      // if (guest) {
-      //   setGuestName(parseRes[0].editors_name);
-      // }
     } catch (err) {
       console.error(err.message);
     }
@@ -107,19 +99,17 @@ export default function Dashboard({ setAuth }) {
 
       let creator = creatorEmail;
 
+      // FIGURE OUT WHY EMAIL ISNT SENDING;
       const body = {
+        // creator name is new keep other params
+        creatorName: name,
         creator,
         editors_name,
         editors,
       };
 
       emailjs
-        .sendForm(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID,
-          e.target,
-          EMAILJS_USER_ID
-        )
+        .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
         .then(
           result => {
             console.log(result.text);
@@ -151,12 +141,9 @@ export default function Dashboard({ setAuth }) {
   return (
     <>
       <div className="d-flex mt-3 justify-content-around">
-        {name && <p>{`${name} is logged in`}</p>}
-        {guestName && <p>{`${guestName} can edit this list`}</p>}
         <button className="btn btn-danger" onClick={e => logout(e)}>
           logout
         </button>
-        {/* IF EDITORS NAME !== NULL THEN SHOW INVITE BUTTON */}
         {!guestName && (
           <button
             type="button"
@@ -168,7 +155,11 @@ export default function Dashboard({ setAuth }) {
           </button>
         )}
       </div>
-      <InputItem setItemWasChanged={setItemWasChanged} />
+      <InputItem
+        name={name}
+        guestName={guestName}
+        setItemWasChanged={setItemWasChanged}
+      />
       <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
       <div
         className="modal fade"
