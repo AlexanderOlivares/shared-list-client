@@ -4,7 +4,6 @@ import {
   Switch,
   Route,
   Redirect,
-  useParams,
 } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -93,12 +92,11 @@ function App() {
           <Route
             exact
             path="/guest-register/:guestsemail/:guestsname"
-            // render={props => <GuestRegister {...props} setAuth={setAuth} />}
             render={props =>
-              isAuthenticated ? (
-                <Dashboard {...props} setAuth={setAuth} />
-              ) : (
+              !isAuthenticated ? (
                 <GuestRegister {...props} setAuth={setAuth} />
+              ) : (
+                <Redirect to="/dashboard" />
               )
             }
           ></Route>

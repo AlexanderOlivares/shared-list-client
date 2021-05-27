@@ -183,7 +183,6 @@ export default function Dashboard({ setAuth }) {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {/* <form onSubmit={handleFormSubmit}> */}
             <form>
               <div className="modal-body">
                 <input
@@ -204,7 +203,6 @@ export default function Dashboard({ setAuth }) {
                   onChange={handleModalInput}
                   required
                 />
-                {/* joining name by dash for use in url */}
                 <input type="hidden" name="creator" value={name} />
                 <input type="hidden" name="creatorEmail" value={creatorEmail} />
               </div>
