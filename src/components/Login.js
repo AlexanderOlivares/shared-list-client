@@ -6,25 +6,82 @@ import emailjs from "emailjs-com";
 export default function Login({ setAuth }) {
   const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
   const EMAILJS_SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
-  const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
+  const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_PASSWORD_RESET_TEMPLATE_ID;
 
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
 
-  const [emailToResetPass, setEmailToResetPass] = useState("");
+  const [emailOfResetUser, setEmailOfResetuser] = useState("");
+  const [nameOfResetUser, setNameOfResetUser] = useState("");
+  const [idOfResetUser, setIdOfResetUser] = useState("");
+
+  // const [emailContent, setEmailContent] = useState({
+  //   emailOfResetUser,
+  //   nameOfResetUser,
+  //   idOfResetUser,
+  // });
 
   const handlePasswordReset = e => {
-    setEmailToResetPass(e.currentTarget.value);
+    setEmailOfResetuser(e.currentTarget.value);
   };
+  // make a fetch call to db and see if email exists & if not return
+  async function isExistingAccount() {
+    const body = {
+      emailOfResetUser,
+    };
+    try {
+      const existingAccount = await fetch(
+        `http://localhost:5000/resetpassword`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
 
-  const sendPasswordResetEmail = () => {
+      let parseRes = await existingAccount.json();
+
+      // if its a sring it means user not found
+      if (typeof parseRes === "string") {
+        alert(parseRes);
+        return false;
+      }
+
+      setNameOfResetUser(parseRes[0].user_name);
+      setIdOfResetUser(parseRes[0].user_id);
+      return true;
+    } catch (error) {
+      console.error(error.message);
+      alert("No account exists with the provided email address.");
+      return false;
+    }
+  }
+
+  console.log(nameOfResetUser);
+  console.log(idOfResetUser);
+  console.log(emailOfResetUser);
+
+  async function sendPasswordResetEmail() {
+    // see if account existst first
+    // const test = await isExistingAccount();
+    let test = await isExistingAccount();
+    if (!test) return;
+    console.log(test);
+
+    // EMAIL CONTENT NEEDS TO WAIT FOR STATE TO UPDATE
     let emailContent = {
-      emailToResetPass,
+      emailOfResetUser: emailOfResetUser,
+      nameOfResetUser: nameOfResetUser,
+      idOfResetUser: idOfResetUser,
     };
 
-    // need to makea new templateID
+    console.log(emailContent);
+
+    // TEST OUT THE EMAIL DATA SHOULD BE FLOWING. BUILD OUT THE /RESETPASSWORD COMPONENT
 
     // emailjs
     //   .send(
@@ -45,7 +102,7 @@ export default function Login({ setAuth }) {
     //       alert("Error could not password reset send email.");
     //     }
     //   );
-  };
+  }
 
   const { email, password } = inputs;
 
@@ -147,7 +204,7 @@ export default function Login({ setAuth }) {
                   type="email"
                   placeholder="you@email.com"
                   name="emailReset"
-                  value={emailToResetPass}
+                  value={emailOfResetUser}
                   onChange={handlePasswordReset}
                   required
                 ></input>
@@ -163,6 +220,7 @@ export default function Login({ setAuth }) {
               </button>
               <button
                 onClick={sendPasswordResetEmail}
+                // onClick={isExistingAccount}
                 type="button"
                 className="btn btn-primary"
                 data-dismiss="modal"

@@ -33,7 +33,6 @@ export default function Dashboard({ setAuth }) {
       setAllItems(parseRes);
     } catch (err) {
       console.error(err.message);
-      // alert(`An error occured. Please refresh the browser.`);
     }
   }
 
