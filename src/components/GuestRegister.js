@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function Register({ setAuth }) {
+export default function GuestRegister({ setAuth }) {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",

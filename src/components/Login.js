@@ -14,26 +14,20 @@ export default function Login({ setAuth }) {
   });
 
   const [emailOfResetUser, setEmailOfResetuser] = useState("");
-  const [nameOfResetUser, setNameOfResetUser] = useState("");
-  const [idOfResetUser, setIdOfResetUser] = useState("");
-
-  // const [emailContent, setEmailContent] = useState({
-  //   emailOfResetUser,
-  //   nameOfResetUser,
-  //   idOfResetUser,
-  // });
+  const { email, password } = inputs;
 
   const handlePasswordReset = e => {
     setEmailOfResetuser(e.currentTarget.value);
   };
-  // make a fetch call to db and see if email exists & if not return
+
+  // sends back a reset link or false if account not found with provided email
   async function isExistingAccount() {
-    const body = {
-      emailOfResetUser,
-    };
     try {
+      const body = {
+        emailOfResetUser,
+      };
       const existingAccount = await fetch(
-        `http://localhost:5000/resetpassword`,
+        `http://localhost:5000/request-password-reset`,
         {
           method: "POST",
           headers: {
@@ -43,17 +37,21 @@ export default function Login({ setAuth }) {
         }
       );
 
-      let parseRes = await existingAccount.json();
+      const accountExists = await existingAccount.json();
 
-      // if its a sring it means user not found
-      if (typeof parseRes === "string") {
-        alert(parseRes);
+      if (!accountExists) {
+        alert("No account exists with the provided email address.");
         return false;
       }
 
-      setNameOfResetUser(parseRes[0].user_name);
-      setIdOfResetUser(parseRes[0].user_id);
-      return true;
+      let emailContent = {
+        emailOfResetUser,
+        nameOfResetUser: accountExists[0][0].user_name,
+        idOfResetUser: accountExists[0][0].user_id,
+        link: accountExists[1],
+      };
+
+      return emailContent;
     } catch (error) {
       console.error(error.message);
       alert("No account exists with the provided email address.");
@@ -61,56 +59,35 @@ export default function Login({ setAuth }) {
     }
   }
 
-  console.log(nameOfResetUser);
-  console.log(idOfResetUser);
-  console.log(emailOfResetUser);
-
   async function sendPasswordResetEmail() {
     // see if account existst first
-    // const test = await isExistingAccount();
-    let test = await isExistingAccount();
-    if (!test) return;
-    console.log(test);
+    let emailContent = await isExistingAccount();
 
-    // EMAIL CONTENT NEEDS TO WAIT FOR STATE TO UPDATE
-    let emailContent = {
-      emailOfResetUser: emailOfResetUser,
-      nameOfResetUser: nameOfResetUser,
-      idOfResetUser: idOfResetUser,
-    };
-
-    console.log(emailContent);
-
-    // TEST OUT THE EMAIL DATA SHOULD BE FLOWING. BUILD OUT THE /RESETPASSWORD COMPONENT
-
-    // emailjs
-    //   .send(
-    //     EMAILJS_SERVICE_ID,
-    //     EMAILJS_TEMPLATE_ID,
-    //     emailContent,
-    //     EMAILJS_USER_ID
-    //   )
-    //   .then(
-    //     result => {
-    //       console.log(result.text);
-    //       alert(
-    //         "Password reset requested. Follow instuctions in email to reset your password."
-    //       );
-    //     },
-    //     error => {
-    //       console.log(error.text);
-    //       alert("Error could not password reset send email.");
-    //     }
-    //   );
+    emailjs
+      .send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        emailContent,
+        EMAILJS_USER_ID
+      )
+      .then(
+        result => {
+          console.log(result.text);
+          alert(
+            "Password reset requested. Follow instuctions in email to reset your password."
+          );
+        },
+        error => {
+          console.log(error.text);
+        }
+      );
   }
-
-  const { email, password } = inputs;
 
   const handleInput = e => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = async e => {
+  const submitLoginForm = async e => {
     e.preventDefault();
     try {
       const body = { email, password };
@@ -131,8 +108,6 @@ export default function Login({ setAuth }) {
         setAuth(false);
         toast.error(parseRes);
       }
-
-      console.log(parseRes);
     } catch (err) {
       console.error(err.message);
     }
@@ -142,7 +117,7 @@ export default function Login({ setAuth }) {
     <>
       <div className="container">
         <h1 className="text-center my-5">Login</h1>
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={submitLoginForm}>
           <input
             className="form-control my-3"
             type="email"
@@ -220,7 +195,6 @@ export default function Login({ setAuth }) {
               </button>
               <button
                 onClick={sendPasswordResetEmail}
-                // onClick={isExistingAccount}
                 type="button"
                 className="btn btn-primary"
                 data-dismiss="modal"
