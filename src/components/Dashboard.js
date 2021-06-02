@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import InputItem from "./InputItem";
 import ListItem from "./ListItem";
 import emailjs from "emailjs-com";
+import "../App.css";
 
 export default function Dashboard({ setAuth }) {
   const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
