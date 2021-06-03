@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import emailjs from "emailjs-com";
 import bg from "../assets/bg.jpeg";
-import { splashPageStyles } from "./Landing";
-import UseMediaQuery from "./UseMediaQuery";
+import { globalStyles } from "./GlobalStyles";
+import useMediaQuery from "./useMediaQuery";
 import bg13 from "../assets/bg13.jpeg";
 
 export default function Login({ setAuth }) {
@@ -12,10 +12,10 @@ export default function Login({ setAuth }) {
   const EMAILJS_SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
   const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_PASSWORD_RESET_TEMPLATE_ID;
 
-  const mobileViewPort = UseMediaQuery("(max-width: 500px)");
+  const mobileViewPort = useMediaQuery("(max-width: 500px)");
 
-  const div1styles = {
-    ...splashPageStyles,
+  const styles = {
+    ...globalStyles,
     backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
   };
 
@@ -125,8 +125,8 @@ export default function Login({ setAuth }) {
   };
 
   return (
-    <div style={div1styles}>
-      <div className="container pt-5">
+    <div style={styles}>
+      <div className="container pt-1">
         <h1 className="text-center">Login</h1>
         <p className="text-center">Sidebar List</p>
         <form

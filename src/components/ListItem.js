@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
 import EditItem from "./EditItem";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-AOS.init();
-
-const itemStyle = {
-  overflow: "scroll",
-  backdropFilter: "blur(10px), brightness(100%), greyscale(10%)",
-};
 
 export default function ListItem({ allItems, setItemWasChanged }) {
   const [items, setItems] = useState([]);
@@ -33,7 +24,11 @@ export default function ListItem({ allItems, setItemWasChanged }) {
   return (
     <div>
       {items.length !== 0 && items[0].item_id !== null && (
-        <table className="mx-auto mt-5 text-dark">
+        <table
+          data-aos="fade-right"
+          data-aos-delay="500"
+          className="mx-auto mt-5 text-dark"
+        >
           <thead className="thead-light">
             <tr className="p-1 m-2">
               <th>Item</th>

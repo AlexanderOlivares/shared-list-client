@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import bg from "../assets/bg.jpeg";
+import { globalStyles } from "./GlobalStyles";
+import useMediaQuery from "./useMediaQuery";
+import bg13 from "../assets/bg13.jpeg";
 
 export default function GuestRegister({ setAuth }) {
+  const mobileViewPort = useMediaQuery("(max-width: 500px)");
+
+  const styles = {
+    ...globalStyles,
+    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+  };
+
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -44,20 +55,22 @@ export default function GuestRegister({ setAuth }) {
         setAuth(false);
         toast.error(parseRes);
       }
-
-      console.log(parseRes);
     } catch (err) {
       console.error(err.message);
+      toast.error("An error occured. Retry via link from the invite email.");
     }
   };
 
   return (
-    <>
+    <div style={styles}>
       <div className="container">
         <h1 className="text-center my-5">Register</h1>
-        <form onSubmit={handleFormSubmit}>
+        <form
+          className="text-center justify-content-center"
+          onSubmit={handleFormSubmit}
+        >
           <input
-            className="form-control my-3"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="email"
             name="email"
             placeholder="email"
@@ -66,7 +79,7 @@ export default function GuestRegister({ setAuth }) {
             required
           ></input>
           <input
-            className="form-control my-3"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="password"
             name="password"
             placeholder="password"
@@ -75,7 +88,7 @@ export default function GuestRegister({ setAuth }) {
             required
           ></input>
           <input
-            className="form-control my-3"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="text"
             name="name"
             placeholder="your name"
@@ -85,10 +98,14 @@ export default function GuestRegister({ setAuth }) {
           ></input>
           <input type="hidden" name="guest_name" value={guestsname}></input>
           <input type="hidden" name="guest_email" value={guestsemail}></input>
-          <button className="btn btn-block btn-success">sign up</button>
+          <button className="btn btn-success form-control my-3 mx-1 col-xs-2 col-sm-4 col-md-5">
+            sign up
+          </button>
         </form>
-        <Link to="/login">Already have an account? Login</Link>
+        <div className="text-center mt-2">
+          <Link to="/login">Already have an account? Login</Link>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

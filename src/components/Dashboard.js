@@ -125,11 +125,11 @@ export default function Dashboard({ setAuth }) {
         .then(
           result => {
             console.log(result.text);
-            alert("invitation was sent");
+            toast.success("Invitation email was sent.");
           },
           error => {
             console.log(error.text);
-            alert("error could not send invite");
+            toast.error("Error could not send invite");
           }
         );
 

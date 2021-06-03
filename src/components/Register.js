@@ -2,14 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import bg from "../assets/bg.jpeg";
-
-const div1styles = {
-  height: "100vh",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundImage: `url(${bg})`,
-};
+import { globalStyles } from "./GlobalStyles";
+import useMediaQuery from "./useMediaQuery";
+import bg13 from "../assets/bg13.jpeg";
 
 export default function Register({ setAuth }) {
   const [inputs, setInputs] = useState({
@@ -18,6 +13,13 @@ export default function Register({ setAuth }) {
     name: "",
     guests_email: "",
   });
+
+  const mobileViewPort = useMediaQuery("(max-width: 500px)");
+
+  const styles = {
+    ...globalStyles,
+    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+  };
 
   const { email, name, password } = inputs;
 
@@ -54,9 +56,10 @@ export default function Register({ setAuth }) {
   };
 
   return (
-    <div style={div1styles}>
+    <div style={styles}>
       <div className="container">
-        <h1 className="text-center p-4">Register</h1>
+        <h1 className="text-center p-2">Register</h1>
+        <p className="text-center mt-n3">Sidebar List</p>
         <form
           className="text-center justify-content-center"
           onSubmit={handleFormSubmit}
@@ -64,7 +67,7 @@ export default function Register({ setAuth }) {
           <input
             data-aos="fade-left"
             data-aos-delay="500"
-            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="email"
             name="email"
             placeholder="email"
@@ -74,7 +77,7 @@ export default function Register({ setAuth }) {
           <input
             data-aos="fade-right"
             data-aos-delay="500"
-            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="password"
             name="password"
             placeholder="password"
@@ -84,13 +87,16 @@ export default function Register({ setAuth }) {
           <input
             data-aos="fade-left"
             data-aos-delay="500"
-            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
+            className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="text"
             name="name"
             placeholder="your name"
             value={name}
             onChange={handleInput}
           ></input>
+          <div data-aos="zoom-in" data-aos-delay="500" className="text-center">
+            <Link to="/login">Already have an account? Login</Link>
+          </div>
           <button
             data-aos="fade-right"
             data-aos-delay="500"
@@ -99,13 +105,6 @@ export default function Register({ setAuth }) {
             sign up
           </button>
         </form>
-        <div
-          data-aos="zoom-in"
-          data-aos-delay="500"
-          className="text-center mt-2 "
-        >
-          <Link to="/login">Already have an account? Login</Link>
-        </div>
       </div>
     </div>
   );

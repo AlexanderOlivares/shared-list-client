@@ -3,9 +3,21 @@ import { useParams } from "react-router";
 import { Redirect } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
+import bg from "../assets/bg.jpeg";
+import { globalStyles } from "./GlobalStyles";
+import useMediaQuery from "./useMediaQuery";
+import bg13 from "../assets/bg13.jpeg";
 
 export default function ResetPassword({ setAuth }) {
+  const mobileViewPort = useMediaQuery("(max-width: 500px)");
+
+  const styles = {
+    ...globalStyles,
+    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+  };
+
   const { id, token } = useParams();
+
   const [input, setInput] = useState({
     password: "",
     conifrmPassword: "",
@@ -81,7 +93,7 @@ export default function ResetPassword({ setAuth }) {
   };
 
   return (
-    <div>
+    <div style={styles}>
       {loading ? (
         <div>
           <Loader type="ThreeDots" color="#00adb5" height={50} width={50} />
@@ -91,24 +103,26 @@ export default function ResetPassword({ setAuth }) {
           <h1 className="text-center my-5">Reset Password</h1>
           <form onSubmit={submitPasswordReset}>
             <input
-              className="form-control my-3"
+              className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
               type="password"
               name="password"
-              placeholder="password"
+              placeholder="new password"
               value={password}
               onChange={handleInput}
             ></input>
             <input
-              className="form-control my-3"
+              className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
               type="password"
               name="confirmPassword"
               placeholder="confirm password"
               value={confirmPassword}
               onChange={handleInput}
             ></input>
-            <button className="btn btn-block btn-success">
-              Reset Password
-            </button>
+            <div className="text-center mt-2">
+              <button className="btn btn-success form-control my-3 mx-1 col-xs-2 col-sm-4 col-md-5">
+                Reset Password
+              </button>
+            </div>
           </form>
         </>
       ) : (

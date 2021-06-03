@@ -4,15 +4,12 @@ import bg10 from "../assets/bg10.jpeg";
 import bg5 from "../assets/bg5.jpeg";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { globalStyles } from "./GlobalStyles";
 
 AOS.init();
 
-export const splashPageStyles = {
-  paddingTop: "20px",
-  height: "100vh",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
+const splashPageStyles = {
+  ...globalStyles,
   backgroundImage: `url(${bg5})`,
 };
 
