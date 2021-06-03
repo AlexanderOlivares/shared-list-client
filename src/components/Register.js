@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import bg from "../assets/bg.jpeg";
+
+const div1styles = {
+  height: "100vh",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundImage: `url(${bg})`,
+};
 
 export default function Register({ setAuth }) {
   const [inputs, setInputs] = useState({
@@ -45,12 +54,17 @@ export default function Register({ setAuth }) {
   };
 
   return (
-    <>
+    <div style={div1styles}>
       <div className="container">
-        <h1 className="text-center my-5">Register</h1>
-        <form onSubmit={handleFormSubmit}>
+        <h1 className="text-center p-4">Register</h1>
+        <form
+          className="text-center justify-content-center"
+          onSubmit={handleFormSubmit}
+        >
           <input
-            className="form-control my-3"
+            data-aos="fade-left"
+            data-aos-delay="500"
+            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="email"
             name="email"
             placeholder="email"
@@ -58,7 +72,9 @@ export default function Register({ setAuth }) {
             onChange={handleInput}
           ></input>
           <input
-            className="form-control my-3"
+            data-aos="fade-right"
+            data-aos-delay="500"
+            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="password"
             name="password"
             placeholder="password"
@@ -66,17 +82,31 @@ export default function Register({ setAuth }) {
             onChange={handleInput}
           ></input>
           <input
-            className="form-control my-3"
+            data-aos="fade-left"
+            data-aos-delay="500"
+            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="text"
             name="name"
             placeholder="your name"
             value={name}
             onChange={handleInput}
           ></input>
-          <button className="btn btn-block btn-success">sign up</button>
+          <button
+            data-aos="fade-right"
+            data-aos-delay="500"
+            className="btn btn-success form-control my-3 mx-1 col-xs-2 col-sm-4 col-md-5"
+          >
+            sign up
+          </button>
         </form>
-        <Link to="/login">Already have an account? Login</Link>
+        <div
+          data-aos="zoom-in"
+          data-aos-delay="500"
+          className="text-center mt-2 "
+        >
+          <Link to="/login">Already have an account? Login</Link>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

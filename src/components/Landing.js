@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../App.css";
 import bg10 from "../assets/bg10.jpeg";
 import bg5 from "../assets/bg5.jpeg";
 import AOS from "aos";
@@ -8,7 +7,7 @@ import "aos/dist/aos.css";
 
 AOS.init();
 
-const div1styles = {
+export const splashPageStyles = {
   paddingTop: "20px",
   height: "100vh",
   backgroundRepeat: "no-repeat",
@@ -17,18 +16,15 @@ const div1styles = {
   backgroundImage: `url(${bg5})`,
 };
 
-const div2styles = {
-  height: "100vh",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
+const footerStyles = {
+  ...splashPageStyles,
   backgroundImage: `url(${bg10})`,
 };
 
 export default function Landing() {
   return (
     <>
-      <div style={div1styles} className="styles">
+      <div style={splashPageStyles} className="styles">
         <div className="d-flex px-4 mt-n2 justify-content-end">
           <Link to="/login" className="btn-sm btn-primary mr-3">
             Login
@@ -70,7 +66,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div className="styles" style={div2styles}>
+      <div className="styles" style={footerStyles}>
         <div className="d-flex align-self-center" style={{ height: "50vh" }}>
           <div
             data-aos="fade-left"

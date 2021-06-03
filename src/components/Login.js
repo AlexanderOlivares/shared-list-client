@@ -2,11 +2,22 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import emailjs from "emailjs-com";
+import bg from "../assets/bg.jpeg";
+import { splashPageStyles } from "./Landing";
+import UseMediaQuery from "./UseMediaQuery";
+import bg13 from "../assets/bg13.jpeg";
 
 export default function Login({ setAuth }) {
   const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
   const EMAILJS_SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
   const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_PASSWORD_RESET_TEMPLATE_ID;
+
+  const mobileViewPort = UseMediaQuery("(max-width: 500px)");
+
+  const div1styles = {
+    ...splashPageStyles,
+    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+  };
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -114,12 +125,18 @@ export default function Login({ setAuth }) {
   };
 
   return (
-    <>
-      <div className="container">
-        <h1 className="text-center my-5">Login</h1>
-        <form onSubmit={submitLoginForm}>
+    <div style={div1styles}>
+      <div className="container pt-5">
+        <h1 className="text-center">Login</h1>
+        <p className="text-center">Sidebar List</p>
+        <form
+          onSubmit={submitLoginForm}
+          className="text-center justify-content-center"
+        >
           <input
-            className="form-control my-3"
+            data-aos="fade-left"
+            data-aos-delay="500"
+            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="email"
             name="email"
             placeholder="email"
@@ -127,18 +144,34 @@ export default function Login({ setAuth }) {
             onChange={handleInput}
           ></input>
           <input
-            className="form-control my-3"
+            data-aos="fade-right"
+            data-aos-delay="500"
+            className="form-control my-3 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="password"
             name="password"
             placeholder="password"
             value={password}
             onChange={handleInput}
           ></input>
-          <button className="btn btn-block btn-success">login</button>
-        </form>
-        <div className="d-flex mt-1 justify-content-around">
-          <Link to="/register">Don't have an account? Sign up</Link>
+          <div
+            data-aos="fade-right"
+            data-aos-delay="500"
+            className="text-center mt-2 "
+          >
+            <Link to="/register">Don't have an account? Sign up</Link>
+          </div>
           <button
+            data-aos="fade-left"
+            data-aos-delay="500"
+            className="btn btn-lg btn-success form-control my-3 mx-1 col-xs-2 col-sm-4 col-md-5"
+          >
+            login
+          </button>
+        </form>
+        <div className="text-center mt-2">
+          <button
+            data-aos="zoom-in"
+            data-aos-delay="500"
             type="button"
             className="btn-sm btn-primary"
             data-toggle="modal"
@@ -205,6 +238,6 @@ export default function Login({ setAuth }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

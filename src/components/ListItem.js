@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 AOS.init();
 
 const itemStyle = {
+  overflow: "scroll",
   backdropFilter: "blur(10px), brightness(100%), greyscale(10%)",
 };
 
@@ -30,10 +31,10 @@ export default function ListItem({ allItems, setItemWasChanged }) {
   }
 
   return (
-    <>
+    <div>
       {items.length !== 0 && items[0].item_id !== null && (
-        <table className="mx-auto mt-5 text-dark" style={itemStyle}>
-          <thead>
+        <table className="mx-auto mt-5 text-dark">
+          <thead className="thead-light">
             <tr className="p-1 m-2">
               <th>Item</th>
               <th>Edit</th>
@@ -45,11 +46,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
             {/* if new user has no items yet this prevents rendering just an edit and delete button */}
             {items.map(item => {
               return (
-                <tr
-                  data-aos="fade-right"
-                  data-aos-delay="500"
-                  key={item.item_id}
-                >
+                <tr key={item.item_id}>
                   <td className="p-1 m-2">{item.description}</td>
                   <td className="p-1 m-2">
                     <EditItem
@@ -74,6 +71,6 @@ export default function ListItem({ allItems, setItemWasChanged }) {
           </tbody>
         </table>
       )}
-    </>
+    </div>
   );
 }

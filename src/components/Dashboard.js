@@ -5,9 +5,14 @@ import ListItem from "./ListItem";
 import emailjs from "emailjs-com";
 import "../App.css";
 import bg9 from "../assets/bg4.jpeg";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+AOS.init();
 
 const div1styles = {
   height: "100vh",
+  overflow: "auto",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -157,7 +162,7 @@ export default function Dashboard({ setAuth }) {
               data-toggle="modal"
               data-target="#exampleModal"
             >
-              Invite editor
+              <i class="bi bi-plus"></i>Invite editor
             </button>
           )}
           <button className="btn btn-danger" onClick={e => logout(e)}>
