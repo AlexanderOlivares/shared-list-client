@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import { phrson-check} from "boostrap-icons"
 
 export default function InputItem({ name, guestName, setItemWasChanged }) {
   const [description, setDescription] = useState("");
@@ -31,20 +32,37 @@ export default function InputItem({ name, guestName, setItemWasChanged }) {
   return (
     <>
       <div className="text-center">
-        <h1 className="display-4 my-2">Our List</h1>
-        {name && <p>{`${name} is logged in`}</p>}
-        {guestName && <p>{`${guestName} can edit this list`}</p>}
+        <h1 className="display-4 my-2">Sidebar List</h1>
+        {name && (
+          <>
+            <p>
+              <i className="bi bi-person-check px-1"></i>
+              {`${name} signed in`}
+            </p>
+          </>
+        )}
+        {guestName && (
+          <p>
+            <i className="bi bi-people px-1"></i>
+            {`${guestName} can edit this list`}
+          </p>
+        )}
       </div>
-      <form className="d-flex" onSubmit={handleFormSubmit}>
-        <input
-          type="text"
-          placeholder="add item"
-          className="form-control"
-          value={description}
-          onChange={handleUserInput}
-        ></input>
-        <button className="btn btn-success">add</button>
-      </form>
+      <div className="justify-content-center">
+        <form
+          className="d-flex justify-content-center"
+          onSubmit={handleFormSubmit}
+        >
+          <input
+            type="text"
+            placeholder="add item"
+            className="form-control mx-1 col-xs-2 col-sm-4 col-md-5"
+            value={description}
+            onChange={handleUserInput}
+          ></input>
+          <button className="btn btn-success">add</button>
+        </form>
+      </div>
     </>
   );
 }

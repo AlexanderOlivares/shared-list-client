@@ -4,6 +4,15 @@ import InputItem from "./InputItem";
 import ListItem from "./ListItem";
 import emailjs from "emailjs-com";
 import "../App.css";
+import bg9 from "../assets/bg4.jpeg";
+
+const div1styles = {
+  height: "100vh",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundImage: `url(${bg9})`,
+};
 
 export default function Dashboard({ setAuth }) {
   const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
@@ -139,91 +148,98 @@ export default function Dashboard({ setAuth }) {
 
   return (
     <>
-      <div className="d-flex mt-3 justify-content-around">
-        <button className="btn btn-danger" onClick={e => logout(e)}>
-          logout
-        </button>
-        {!guestName && (
-          <button
-            type="button"
-            className="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-          >
-            Invite editor
+      <div style={div1styles}>
+        <div className="d-flex px-4 py-2 justify-content-end">
+          {!guestName && (
+            <button
+              type="button"
+              className="btn btn-primary mx-2"
+              data-toggle="modal"
+              data-target="#exampleModal"
+            >
+              Invite editor
+            </button>
+          )}
+          <button className="btn btn-danger" onClick={e => logout(e)}>
+            logout
           </button>
-        )}
-      </div>
-      <InputItem
-        name={name}
-        guestName={guestName}
-        setItemWasChanged={setItemWasChanged}
-      />
-      <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                Share this list with:
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form>
-              <div className="modal-body">
-                <input
-                  className="form-control"
-                  type="text"
-                  name="name"
-                  value={modalInput.name}
-                  placeholder="editor's name"
-                  onChange={handleModalInput}
-                  required
-                />
-                <input
-                  className="form-control"
-                  name="email"
-                  value={modalInput.email}
-                  type="email"
-                  placeholder="editors@email.com"
-                  onChange={handleModalInput}
-                  required
-                />
-                <input type="hidden" name="creator" value={name} />
-                <input type="hidden" name="creatorEmail" value={creatorEmail} />
-              </div>
-              <div className="modal-footer">
+        </div>
+        <InputItem
+          name={name}
+          guestName={guestName}
+          setItemWasChanged={setItemWasChanged}
+        />
+        {/* PUT A GLASS BEHIND LIST ITEM FOR READABLITLIY */}
+        <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
+        <div
+          className="modal fade"
+          id="exampleModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Share this list with:
+                </h5>
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="close"
                   data-dismiss="modal"
+                  aria-label="Close"
                 >
-                  Close
-                </button>
-                <button
-                  type="submit"
-                  onClick={handleFormSubmit}
-                  className="btn btn-primary"
-                  data-dismiss="modal"
-                >
-                  Send invite
+                  <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-            </form>
+              <form>
+                <div className="modal-body">
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="name"
+                    value={modalInput.name}
+                    placeholder="editor's name"
+                    onChange={handleModalInput}
+                    required
+                  />
+                  <input
+                    className="form-control mt-2"
+                    name="email"
+                    value={modalInput.email}
+                    type="email"
+                    placeholder="editors@email.com"
+                    onChange={handleModalInput}
+                    required
+                  />
+                  <input type="hidden" name="creator" value={name} />
+                  <input
+                    type="hidden"
+                    name="creatorEmail"
+                    value={creatorEmail}
+                  />
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    onClick={handleFormSubmit}
+                    className="btn btn-primary"
+                    data-dismiss="modal"
+                  >
+                    Send invite
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

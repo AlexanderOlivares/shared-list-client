@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import EditItem from "./EditItem";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+AOS.init();
+
+const itemStyle = {
+  backdropFilter: "blur(10px), brightness(100%), greyscale(10%)",
+};
 
 export default function ListItem({ allItems, setItemWasChanged }) {
   const [items, setItems] = useState([]);
@@ -23,30 +31,33 @@ export default function ListItem({ allItems, setItemWasChanged }) {
 
   return (
     <>
-      <table className="mx-auto mt-5">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Edit</th>
-            <th>Delete</th>
-            <th>Creator</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* if new user has no items yet this prevents rendering just an edit and delete button */}
-          {items.length !== 0 &&
-            items[0].item_id !== null &&
-            items.map(item => {
+      {items.length !== 0 && items[0].item_id !== null && (
+        <table className="mx-auto mt-5 text-dark" style={itemStyle}>
+          <thead>
+            <tr className="p-1 m-2">
+              <th>Item</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Creator</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* if new user has no items yet this prevents rendering just an edit and delete button */}
+            {items.map(item => {
               return (
-                <tr key={item.item_id}>
-                  <td>{item.description}</td>
-                  <td>
+                <tr
+                  data-aos="fade-right"
+                  data-aos-delay="500"
+                  key={item.item_id}
+                >
+                  <td className="p-1 m-2">{item.description}</td>
+                  <td className="p-1 m-2">
                     <EditItem
                       item={item}
                       setItemWasChanged={setItemWasChanged}
                     />
                   </td>
-                  <td>
+                  <td className="p-1 m-2">
                     <button
                       className="btn-sm btn-danger"
                       onClick={() => deleteListItem(item.item_id)}
@@ -54,12 +65,15 @@ export default function ListItem({ allItems, setItemWasChanged }) {
                       Delete
                     </button>
                   </td>
-                  <td>{item.creator_name.split(" ")[0]}</td>
+                  <td className="pl-3 m-2">
+                    {item.creator_name.split(" ")[0]}
+                  </td>
                 </tr>
               );
             })}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      )}
     </>
   );
 }
