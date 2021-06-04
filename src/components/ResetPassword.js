@@ -100,7 +100,7 @@ export default function ResetPassword() {
   return (
     <div style={styles}>
       {loading ? (
-        <div>
+        <div className="mx-auto">
           <Loader type="ThreeDots" color="#00adb5" height={50} width={50} />
         </div>
       ) : render ? (
