@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import bg10 from "../assets/bg10.jpeg";
-import bg5 from "../assets/bg5.jpeg";
+import footerBg from "../assets/footerBg.jpeg";
+import splashpageBg from "../assets/splashpageBg.jpeg";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { globalStyles } from "./GlobalStyles";
@@ -10,12 +10,12 @@ AOS.init();
 
 const splashPageStyles = {
   ...globalStyles,
-  backgroundImage: `url(${bg5})`,
+  backgroundImage: `url(${splashpageBg})`,
 };
 
 const footerStyles = {
   ...splashPageStyles,
-  backgroundImage: `url(${bg10})`,
+  backgroundImage: `url(${footerBg})`,
 };
 
 export default function Landing() {
@@ -71,7 +71,6 @@ export default function Landing() {
             className="card m-auto text-center"
             style={{ width: "18rem" }}
           >
-            <img src={""} className="card-img-top" alt="..." />
             <div className="card-body">
               <h5 className="card-title">May I approach the List?</h5>
               <p className="card-text">

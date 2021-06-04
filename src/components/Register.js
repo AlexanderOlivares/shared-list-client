@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import bg from "../assets/bg.jpeg";
+import primaryBg from "../assets/primaryBg.jpeg";
 import { globalStyles } from "./GlobalStyles";
 import useMediaQuery from "./useMediaQuery";
-import bg13 from "../assets/bg13.jpeg";
+import mobileBg from "../assets/mobileBg.jpeg";
 
 export default function Register({ setAuth }) {
   const [inputs, setInputs] = useState({
@@ -18,7 +18,7 @@ export default function Register({ setAuth }) {
 
   const styles = {
     ...globalStyles,
-    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+    backgroundImage: mobileViewPort ? `url(${mobileBg})` : `url(${primaryBg})`,
   };
 
   const { email, name, password } = inputs;
@@ -27,8 +27,18 @@ export default function Register({ setAuth }) {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
+  const isValidPassword = password => /.{6,30}/.test(password);
+
   const handleFormSubmit = async e => {
     e.preventDefault();
+
+    if (!isValidPassword(password)) {
+      toast.error(
+        "Password must be between 6 and 30 characters. Please try again."
+      );
+      return;
+    }
+
     try {
       const body = { email, name, password };
       const response = await fetch(`http://localhost:5000/auth/register`, {
@@ -48,10 +58,9 @@ export default function Register({ setAuth }) {
         setAuth(false);
         toast.error(parseRes);
       }
-
-      console.log(parseRes);
     } catch (err) {
       console.error(err.message);
+      toast.error("Error could not create account. Please try again.");
     }
   };
 
@@ -80,7 +89,7 @@ export default function Register({ setAuth }) {
             className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="password"
             name="password"
-            placeholder="password"
+            placeholder="password (must be at least 6 characters)"
             value={password}
             onChange={handleInput}
           ></input>

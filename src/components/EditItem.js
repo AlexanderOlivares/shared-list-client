@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function EditItem({ item, setItemWasChanged }) {
   const [description, setDescription] = useState(item.description);
@@ -20,6 +21,7 @@ export default function EditItem({ item, setItemWasChanged }) {
       setItemWasChanged(true);
     } catch (err) {
       console.error(err.message);
+      toast.error("Error occured. Could not edit item. Try again.");
     }
   };
 

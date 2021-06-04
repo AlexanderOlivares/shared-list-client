@@ -1,5 +1,3 @@
-// styling
-
 export const globalStyles = {
   paddingTop: "20px",
   height: "100vh",

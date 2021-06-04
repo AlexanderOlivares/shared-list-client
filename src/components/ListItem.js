@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import EditItem from "./EditItem";
 
 export default function ListItem({ allItems, setItemWasChanged }) {
@@ -18,11 +19,13 @@ export default function ListItem({ allItems, setItemWasChanged }) {
       setItems(items.filter(item => item.item_id !== id));
     } catch (err) {
       console.error(err.message);
+      toast.error("Error could not delete item");
     }
   }
 
   return (
     <div>
+      {/* if new user has no items yet this prevents rendering just an edit and delete button */}
       {items.length !== 0 && items[0].item_id !== null && (
         <table
           data-aos="fade-right"
@@ -38,7 +41,6 @@ export default function ListItem({ allItems, setItemWasChanged }) {
             </tr>
           </thead>
           <tbody>
-            {/* if new user has no items yet this prevents rendering just an edit and delete button */}
             {items.map(item => {
               return (
                 <tr key={item.item_id}>

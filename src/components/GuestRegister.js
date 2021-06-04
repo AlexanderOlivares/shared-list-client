@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import bg from "../assets/bg.jpeg";
+import primaryBg from "../assets/primaryBg.jpeg";
 import { globalStyles } from "./GlobalStyles";
 import useMediaQuery from "./useMediaQuery";
-import bg13 from "../assets/bg13.jpeg";
+import mobileBg from "../assets/mobileBg.jpeg";
 
 export default function GuestRegister({ setAuth }) {
   const mobileViewPort = useMediaQuery("(max-width: 500px)");
 
   const styles = {
     ...globalStyles,
-    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+    backgroundImage: mobileViewPort ? `url(${mobileBg})` : `url(${primaryBg})`,
   };
 
   const [inputs, setInputs] = useState({
@@ -22,7 +22,6 @@ export default function GuestRegister({ setAuth }) {
   });
 
   let { guestsemail, guestsname } = useParams();
-
   guestsemail = atob(guestsemail);
 
   const { email, name, password } = inputs;
@@ -31,8 +30,16 @@ export default function GuestRegister({ setAuth }) {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
+  const isValidPassword = password => /.{6,30}/.test(password);
+
   const handleFormSubmit = async e => {
     e.preventDefault();
+
+    if (!isValidPassword(password)) {
+      toast.error("Password must be between 6 and 30 characters");
+      return;
+    }
+
     try {
       const body = { email, name, password, guestsemail, guestsname };
       const response = await fetch(

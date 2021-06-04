@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import emailjs from "emailjs-com";
-import bg from "../assets/bg.jpeg";
+import primaryBg from "../assets/primaryBg.jpeg";
 import { globalStyles } from "./GlobalStyles";
 import useMediaQuery from "./useMediaQuery";
-import bg13 from "../assets/bg13.jpeg";
+import mobileBg from "../assets/mobileBg.jpeg";
 
 export default function Login({ setAuth }) {
   const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
@@ -16,7 +16,7 @@ export default function Login({ setAuth }) {
 
   const styles = {
     ...globalStyles,
-    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+    backgroundImage: mobileViewPort ? `url(${mobileBg})` : `url(${primaryBg})`,
   };
 
   const [inputs, setInputs] = useState({
@@ -37,6 +37,7 @@ export default function Login({ setAuth }) {
       const body = {
         emailOfResetUser,
       };
+
       const existingAccount = await fetch(
         `http://localhost:5000/request-password-reset`,
         {
@@ -51,7 +52,6 @@ export default function Login({ setAuth }) {
       const accountExists = await existingAccount.json();
 
       if (!accountExists) {
-        alert("No account exists with the provided email address.");
         return false;
       }
 
@@ -65,7 +65,6 @@ export default function Login({ setAuth }) {
       return emailContent;
     } catch (error) {
       console.error(error.message);
-      alert("No account exists with the provided email address.");
       return false;
     }
   }
@@ -84,12 +83,15 @@ export default function Login({ setAuth }) {
       .then(
         result => {
           console.log(result.text);
-          alert(
+          toast.success(
             "Password reset requested. Follow instuctions in email to reset your password."
           );
         },
         error => {
           console.log(error.text);
+          toast.error(
+            "Couldn't find an account with that email. Double check your email and try again."
+          );
         }
       );
   }
@@ -109,18 +111,22 @@ export default function Login({ setAuth }) {
         },
         body: JSON.stringify(body),
       });
+
       const parseRes = await response.json();
 
       if (parseRes.token) {
         localStorage.setItem("token", parseRes.token);
         setAuth(true);
-        toast.success("successful login");
+        toast.success("Successful login. Welcome!");
       } else {
         setAuth(false);
         toast.error(parseRes);
       }
     } catch (err) {
       console.error(err.message);
+      toast.error(
+        "Error could not log in. Please try again or request a password reset."
+      );
     }
   };
 

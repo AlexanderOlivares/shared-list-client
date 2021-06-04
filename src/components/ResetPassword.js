@@ -3,17 +3,17 @@ import { useParams } from "react-router";
 import { Redirect } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
-import bg from "../assets/bg.jpeg";
+import primaryBg from "../assets/primaryBg.jpeg";
 import { globalStyles } from "./GlobalStyles";
 import useMediaQuery from "./useMediaQuery";
-import bg13 from "../assets/bg13.jpeg";
+import mobileBg from "../assets/mobileBg.jpeg";
 
-export default function ResetPassword({ setAuth }) {
+export default function ResetPassword() {
   const mobileViewPort = useMediaQuery("(max-width: 500px)");
 
   const styles = {
     ...globalStyles,
-    backgroundImage: mobileViewPort ? `url(${bg13})` : `url(${bg})`,
+    backgroundImage: mobileViewPort ? `url(${mobileBg})` : `url(${primaryBg})`,
   };
 
   const { id, token } = useParams();
@@ -28,7 +28,7 @@ export default function ResetPassword({ setAuth }) {
 
   const validateToken = async () => {
     try {
-      const isValidToken = await fetch(
+      const response = await fetch(
         `http://localhost:5000/resetpassword/${id}/${token}`,
         {
           method: "GET",
@@ -37,7 +37,7 @@ export default function ResetPassword({ setAuth }) {
           },
         }
       );
-      const validToken = await isValidToken.json();
+      const validToken = await response.json();
       if (validToken) {
         setRender(true);
         setLoading(false);
@@ -61,6 +61,8 @@ export default function ResetPassword({ setAuth }) {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
+  const isValidPassword = password => /.{6,30}/.test(password);
+
   const { password, confirmPassword } = input;
 
   const submitPasswordReset = async e => {
@@ -68,6 +70,9 @@ export default function ResetPassword({ setAuth }) {
     const body = { password, confirmPassword };
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
+      return;
+    } else if (!isValidPassword(password)) {
+      toast.error("Password must be between 6 and 30 characters");
       return;
     }
     try {

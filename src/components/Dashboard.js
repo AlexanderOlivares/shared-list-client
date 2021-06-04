@@ -4,19 +4,17 @@ import InputItem from "./InputItem";
 import ListItem from "./ListItem";
 import emailjs from "emailjs-com";
 import "../App.css";
-import bg9 from "../assets/bg4.jpeg";
+import dashboardBg from "../assets/dashboardBg.jpeg";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { globalStyles } from "./GlobalStyles";
 
 AOS.init();
 
-const div1styles = {
-  height: "100vh",
+const styles = {
+  ...globalStyles,
   overflow: "auto",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundImage: `url(${bg9})`,
+  backgroundImage: `url(${dashboardBg})`,
 };
 
 export default function Dashboard({ setAuth }) {
@@ -70,13 +68,9 @@ export default function Dashboard({ setAuth }) {
       setGuestName(parseRes[0].guests_name);
     } catch (err) {
       console.error(err.message);
+      setName("You are");
     }
   }
-
-  console.log(allItems);
-  console.log(creatorEmail);
-  console.log(name);
-  console.log(guestName);
 
   useEffect(() => {
     getUsernameAndEmail();
@@ -102,7 +96,7 @@ export default function Dashboard({ setAuth }) {
     return nameStr.trim().replace(/\s/g, "-");
   };
 
-  const handleFormSubmit = async e => {
+  const sendInviteEditorEmail = async e => {
     e.preventDefault();
     try {
       const { name: editors_name, email: editors } = modalInput;
@@ -129,11 +123,11 @@ export default function Dashboard({ setAuth }) {
           },
           error => {
             console.log(error.text);
-            toast.error("Error could not send invite");
+            toast.error(
+              "Error could not send invite email. Please double check you have the correct address."
+            );
           }
         );
-
-      console.log(JSON.stringify(body));
 
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -148,12 +142,13 @@ export default function Dashboard({ setAuth }) {
       setGuestName(editors_name);
     } catch (err) {
       console.error(err.message);
+      toast.error("Error could not send invite. Please try again.");
     }
   };
 
   return (
     <>
-      <div style={div1styles}>
+      <div style={styles}>
         <div className="d-flex px-4 py-2 justify-content-end">
           {!guestName && (
             <button
@@ -174,7 +169,6 @@ export default function Dashboard({ setAuth }) {
           guestName={guestName}
           setItemWasChanged={setItemWasChanged}
         />
-        {/* PUT A GLASS BEHIND LIST ITEM FOR READABLITLIY */}
         <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
         <div
           className="modal fade"
@@ -236,7 +230,7 @@ export default function Dashboard({ setAuth }) {
                   </button>
                   <button
                     type="submit"
-                    onClick={handleFormSubmit}
+                    onClick={sendInviteEditorEmail}
                     className="btn btn-primary"
                     data-dismiss="modal"
                   >
