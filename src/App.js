@@ -36,8 +36,6 @@ function App() {
     }
   }
 
-  console.log(isAuthenticated);
-
   useEffect(() => {
     isAuth();
   }, []);
